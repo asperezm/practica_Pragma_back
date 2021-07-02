@@ -8,8 +8,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+
+import com.example.clientservice.model.Photo;
 
 import lombok.Data;
 
@@ -45,6 +48,9 @@ public class Client implements Serializable{
     @NotEmpty(message = "la ciudad de nacimiento no puede ser vacía")
     @Column(name="city", nullable=false)
     private String city;
+
+    @Transient
+    private Photo photo;
 
     @Column(name="photo_id")
     private String photoId;
