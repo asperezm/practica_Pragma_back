@@ -7,6 +7,7 @@ import com.example.imageservice.service.PhotoService;
 
 import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,9 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import lombok.extern.slf4j.Slf4j;
+import io.swagger.annotations.ApiOperation;
 
-@Slf4j
 @RestController
 @RequestMapping(value = "/photos")
 public class PhotoController {
@@ -27,16 +27,19 @@ public class PhotoController {
     PhotoService photoService;
     
     @GetMapping("/{id}")
-    public ResponseEntity<Binary> getPhoto(@PathVariable String id) {
+    @ApiOperation(value = "Get photo by id.", notes = "Provide an ID to look up specific photo.")
+    public ResponseEntity<Photo> getPhoto(@PathVariable String id) {
         Photo photo = photoService.getPhoto(id);
-    
-        Binary image = photo.getPhoto();
-        return ResponseEntity.ok(image);
+        if (photo == null) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(photo);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addPhoto(@RequestParam("image") MultipartFile image) throws IOException {
-        String id = photoService.addPhoto(image);
-        return ResponseEntity.ok(id);
+    @ApiOperation(value = "Add photo.", notes = "Provide photo data to create it.")
+    public ResponseEntity<Photo> addPhoto(@RequestParam("image") MultipartFile image) throws IOException {
+        Photo photoDB = photoService.addPhoto(image);
+        return ResponseEntity.status(HttpStatus.CREATED).body(photoDB);
     }
 }

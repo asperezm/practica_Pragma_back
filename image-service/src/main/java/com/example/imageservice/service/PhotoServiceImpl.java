@@ -4,11 +4,10 @@ import java.io.IOException;
 
 import com.example.imageservice.entity.Photo;
 import com.example.imageservice.repository.PhotoRepository;
-
-import org.bson.BsonBinarySubType;
-import org.bson.types.Binary;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -18,14 +17,24 @@ public class PhotoServiceImpl implements PhotoService{
     @Autowired
     private PhotoRepository photoRepo;
 
-    public String addPhoto(MultipartFile file) throws IOException { 
+    private ModelMapper modelMapper = new ModelMapper();
+
+    @Override
+    @Transactional
+    public Photo addPhoto(MultipartFile file) throws IOException { 
         Photo photo = new Photo(); 
-        photo.setPhoto(new Binary(BsonBinarySubType.BINARY, file.getBytes())); 
-        photo = photoRepo.insert(photo); 
-        return photo.getId(); 
+        photo.setPhoto(file.getBytes());
+        photo = photoRepo.save(photo);
+        Photo photoDB = modelMapper.map(photo, Photo.class);
+        return photoDB; 
     }
 
+    @Override
     public Photo getPhoto(String id) { 
-        return photoRepo.findById(id).get(); 
+        Photo photoDB = photoRepo.findById(id).orElse(null);
+        if (photoDB != null) {
+			photoDB = modelMapper.map(photoDB, Photo.class);
+		}
+		return photoDB;
     }
 }

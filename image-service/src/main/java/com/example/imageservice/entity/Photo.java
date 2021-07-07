@@ -1,7 +1,5 @@
 package com.example.imageservice.entity;
 
-
-import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -20,5 +18,5 @@ public class Photo {
     @Id
     private String id;
         
-    private Binary photo;
+    private byte[] photo;
 }
