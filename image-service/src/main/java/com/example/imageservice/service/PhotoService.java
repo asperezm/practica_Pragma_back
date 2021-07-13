@@ -10,5 +10,9 @@ public interface PhotoService {
     
     public Photo addPhoto(MultipartFile file) throws IOException;
 
+    public Photo addPhoto(Photo photo);
+
     public Photo getPhoto(String id);
+
+    public Photo updatePhoto(String id, Photo photo);
 }

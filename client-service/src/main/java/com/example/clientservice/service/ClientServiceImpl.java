@@ -1,17 +1,30 @@
 package com.example.clientservice.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
+import com.example.clientservice.client.PhotoClient;
 import com.example.clientservice.entity.Client;
+import com.example.clientservice.model.Photo;
 import com.example.clientservice.repository.ClientRepository;
+import com.example.clientservice.util.MockMultipartFile;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.apache.http.entity.ContentType;
 
 
+@Service
 public class ClientServiceImpl implements ClientService{
 
     @Autowired
-    ClientRepository clientRepository;
+    private PhotoClient photoClient;
+
+    @Autowired
+    private ClientRepository clientRepository;
 
     @Override
     public List<Client> findClientAll() {
@@ -20,7 +33,7 @@ public class ClientServiceImpl implements ClientService{
     }
 
     @Override
-    public Client createClient(Client client) {
+    public Client createClient(Client client) throws IOException {
         // TODO Auto-generated method stub
 
         Client clientDB = clientRepository.findByNumberID(client.getNumberID());
@@ -29,6 +42,17 @@ public class ClientServiceImpl implements ClientService{
         }
         client.setState("CREATED");
         clientDB = clientRepository.save(client);
+        Photo photo = null;
+		if (client.getPhoto() != null) {
+            photo = client.getPhoto();
+            byte[] pdfFile = client.getPhoto().getPhoto();
+            InputStream inputStream = new ByteArrayInputStream(pdfFile);
+            MultipartFile file = new MockMultipartFile("hola.jpg","old.jpg",ContentType.APPLICATION_OCTET_STREAM.toString(), inputStream);
+			MultipartFile photoDB = photoClient.addPhoto(file).getBody();
+			if (photoDB != null) {
+				clientDB.setPhotoId(photo.getId());
+			}
+		}
         return clientDB;
     }
 
@@ -46,7 +70,21 @@ public class ClientServiceImpl implements ClientService{
         clientDB.setNumberID(client.getNumberID());
         clientDB.setCity(client.getCity());
         clientDB.setAge(client.getAge());
-        clientDB.setPhotoId(client.getPhotoId());
+
+        Photo photo = null;
+		if (client.getPhoto() != null) {
+			photo = photoClient.getPhoto(client.getPhoto().getId()).getBody();
+			if (photo == null) {
+				byte[] pdfFile = client.getPhoto().getPhoto();
+                InputStream inputStream = new ByteArrayInputStream(pdfFile);
+                MultipartFile file = new MockMultipartFile("hola.jpg","old.jpg",ContentType.APPLICATION_OCTET_STREAM.toString(), inputStream);
+			    MultipartFile photoDB = photoClient.addPhoto(file).getBody();
+			} else {
+				photo.setPhoto(client.getPhoto().getPhoto());
+				photo = photoClient.updatePhoto(photo).getBody();
+			}
+			clientDB.setPhotoId(photo.getId());
+		}
 
         return  clientRepository.save(clientDB);
     }

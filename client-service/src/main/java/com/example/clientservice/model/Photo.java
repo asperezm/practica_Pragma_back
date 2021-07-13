@@ -1,13 +1,14 @@
 package com.example.clientservice.model;
 
-import org.bson.types.Binary;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class Photo {
     
     private String id;
         
-    private Binary photo;
+    private byte[] photo;
 }

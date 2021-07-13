@@ -37,4 +37,24 @@ public class PhotoServiceImpl implements PhotoService{
 		}
 		return photoDB;
     }
+
+    @Override
+    public Photo addPhoto(Photo photo) {
+        // TODO Auto-generated method stub
+        Photo photoDB = modelMapper.map(photo, Photo.class);
+		photoDB = photoRepo.save(photoDB);
+		return photoDB;
+    }
+
+    @Override
+    public Photo updatePhoto(String id, Photo photo) {
+        // TODO Auto-generated method stub
+        Photo photoDB = photoRepo.findById(id).orElse(null);
+		if (photoDB == null) {
+			return null;
+		}
+		photoDB.setPhoto(photo.getPhoto());
+		photoDB = photoRepo.save(photoDB);
+		return photoDB;
+    }
 }

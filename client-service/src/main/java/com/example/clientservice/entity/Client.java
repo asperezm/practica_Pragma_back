@@ -42,7 +42,7 @@ public class Client implements Serializable{
     @Column(name="last_name", nullable=false)
     private String lastName;
 
-    @NotEmpty(message = "la edad no puede ser vacío")
+    @NotEmpty(message = "la edad no puede ser vacía")
     @Column(name="age", nullable=false)
     private String age;
 

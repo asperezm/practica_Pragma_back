@@ -1,5 +1,6 @@
 package com.example.clientservice.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,13 +59,13 @@ public class ClientRest {
     }
 
     @PostMapping
-    public ResponseEntity<Client> createClient(@Valid @RequestBody Client client, BindingResult result) {
+    public ResponseEntity<Client> createClient(@Valid @RequestBody Client client, BindingResult result) throws IOException {
         log.info("Creating Client : {}", client);
         if (result.hasErrors()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
         }
 
-       Client clientDB = clientService.createClient (client);
+       Client clientDB = clientService.createClient(client);
 
         return  ResponseEntity.status(HttpStatus.CREATED).body(clientDB);
     }
