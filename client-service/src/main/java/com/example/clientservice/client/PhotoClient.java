@@ -18,7 +18,7 @@ public interface PhotoClient {
     public ResponseEntity<Photo> getPhoto(@PathVariable String id);
 
     @PostMapping("/add")
-    public ResponseEntity<Photo> addPhoto(@RequestParam("image") MultipartFile image);
+    public ResponseEntity<MultipartFile> addPhoto(@RequestParam("image") MultipartFile image);
 
     @PutMapping(value = "/{id}")
 	public ResponseEntity<Photo> updatePhoto(@PathVariable("id") String id, @RequestBody(required = true) Photo photo);

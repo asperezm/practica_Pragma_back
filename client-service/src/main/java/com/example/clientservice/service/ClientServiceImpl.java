@@ -57,7 +57,7 @@ public class ClientServiceImpl implements ClientService{
     }
 
     @Override
-    public Client updateClient(Client client) {
+    public Client updateClient(Client client) throws IOException {
         // TODO Auto-generated method stub
         Client clientDB = getClient(client.getId());
         if(clientDB != null){
@@ -81,7 +81,7 @@ public class ClientServiceImpl implements ClientService{
 			    MultipartFile photoDB = photoClient.addPhoto(file).getBody();
 			} else {
 				photo.setPhoto(client.getPhoto().getPhoto());
-				photo = photoClient.updatePhoto(photo).getBody();
+				photo = photoClient.updatePhoto(photo.getId(),photo).getBody();
 			}
 			clientDB.setPhotoId(photo.getId());
 		}

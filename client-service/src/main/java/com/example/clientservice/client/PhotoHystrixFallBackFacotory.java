@@ -16,7 +16,7 @@ public class PhotoHystrixFallBackFacotory implements PhotoClient{
     }
 
     @Override
-    public ResponseEntity<Photo> addPhoto(MultipartFile image) {
+    public ResponseEntity<MultipartFile> addPhoto(MultipartFile image) {
         // TODO Auto-generated method stub
         return ResponseEntity.ok().build();
     }

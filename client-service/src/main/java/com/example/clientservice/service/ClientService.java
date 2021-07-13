@@ -10,7 +10,7 @@ public interface ClientService {
     public List<Client> findClientAll();
 
     public Client createClient(Client client) throws IOException;
-    public Client updateClient(Client client);
+    public Client updateClient(Client client) throws IOException;
     public Client deleteClient(Client client);
     public  Client getClient(Long id);
 }

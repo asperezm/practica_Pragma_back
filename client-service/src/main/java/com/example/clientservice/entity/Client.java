@@ -1,6 +1,5 @@
 package com.example.clientservice.entity;
 
-import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,7 +18,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "tbl_client")
-public class Client implements Serializable{
+public class Client{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
