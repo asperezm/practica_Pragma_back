@@ -11,11 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.ResponseEntity;
 import com.example.clientservice.model.Photo;
 
-@FeignClient(name = "image-service", path= "/photos", fallback = PhotoHystrixFallBackFacotory.class)
+@FeignClient(name = "image-service", path= "/photos", fallback = PhotoHystrixFallBackFactory.class)
 public interface PhotoClient {
     
     @GetMapping("/{id}")
-    public ResponseEntity<Photo> getPhoto(@PathVariable String id);
+    public ResponseEntity<Photo> getPhoto(@PathVariable("id") String id);
 
     @PostMapping("/add")
     public ResponseEntity<MultipartFile> addPhoto(@RequestParam("image") MultipartFile image);

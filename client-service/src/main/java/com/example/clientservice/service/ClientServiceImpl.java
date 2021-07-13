@@ -14,17 +14,20 @@ import com.example.clientservice.util.MockMultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.http.entity.ContentType;
 
-
+@Slf4j
 @Service
 public class ClientServiceImpl implements ClientService{
 
     @Autowired
-    private PhotoClient photoClient;
+    PhotoClient photoClient;
 
     @Autowired
-    private ClientRepository clientRepository;
+    ClientRepository clientRepository;
 
     @Override
     public List<Client> findClientAll() {
@@ -104,7 +107,16 @@ public class ClientServiceImpl implements ClientService{
     @Override
     public Client getClient(Long id) {
         // TODO Auto-generated method stub
-        return clientRepository.findById(id).orElse(null);
+        Client clientDB =  clientRepository.findById(id).orElse(null);
+        if (clientDB == null) {
+			return clientDB;
+		}
+        if (clientDB.getPhotoId() != null) {
+            System.out.println("holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+			Photo photo = photoClient.getPhoto(clientDB.getPhotoId()).getBody();
+			clientDB.setPhoto(photo);
+		}
+		return clientDB;
     }
     
 }

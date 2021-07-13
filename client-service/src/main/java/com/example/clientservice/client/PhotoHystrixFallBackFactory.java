@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 @Component
-public class PhotoHystrixFallBackFacotory implements PhotoClient{
+public class PhotoHystrixFallBackFactory implements PhotoClient{
 
     @Override
     public ResponseEntity<Photo> getPhoto(String id) {

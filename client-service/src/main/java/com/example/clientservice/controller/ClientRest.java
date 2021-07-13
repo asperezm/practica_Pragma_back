@@ -71,7 +71,7 @@ public class ClientRest {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<?> updateClient(@PathVariable("id") long id, @RequestBody Client client) {
+    public ResponseEntity<?> updateClient(@PathVariable("id") long id, @RequestBody Client client) throws IOException {
         log.info("Updating Client with id {}", id);
 
         Client currentClient = clientService.getClient(id);
