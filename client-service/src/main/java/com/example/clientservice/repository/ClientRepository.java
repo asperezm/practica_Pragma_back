@@ -6,7 +6,8 @@ import com.example.clientservice.entity.Client;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ClientRepository extends JpaRepository<Client,Long>{
-    public Client findByNumberID(String numberID);
+public interface ClientRepository extends JpaRepository<Client,Integer>{
+    public Client findByNumberID(int numberID);
     public List<Client> findByLastName(String lastName);
+    public List<Client> findByAgeGreaterThanEqual(int age);
 }

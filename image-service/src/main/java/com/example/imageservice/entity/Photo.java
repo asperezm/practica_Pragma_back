@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document(collation = "photos")
+@Document(collection = "photo")
 public class Photo {
     
     @Id

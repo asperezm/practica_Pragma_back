@@ -57,4 +57,14 @@ public class PhotoServiceImpl implements PhotoService{
 		photoDB = photoRepo.save(photoDB);
 		return photoDB;
     }
+
+    @Override
+    public void deletePhoto(Photo photo) {
+        // TODO Auto-generated method stub
+        Photo photoDB = getPhoto(photo.getId());
+        if (photoDB == null){
+            //return  null;
+        }
+        photoRepo.delete(photoDB);
+    }
 }

@@ -15,4 +15,6 @@ public interface PhotoService {
     public Photo getPhoto(String id);
 
     public Photo updatePhoto(String id, Photo photo);
+
+    public void deletePhoto(Photo photo);
 }

@@ -22,7 +22,7 @@ public class Client{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column(name = "type_document", nullable = false)
     @NotEmpty(message = "El tipo de documento no puede ser vacío")
@@ -43,7 +43,7 @@ public class Client{
 
     @NotEmpty(message = "la edad no puede ser vacía")
     @Column(name="age", nullable=false)
-    private String age;
+    private int age;
 
     @NotEmpty(message = "la ciudad de nacimiento no puede ser vacía")
     @Column(name="city", nullable=false)

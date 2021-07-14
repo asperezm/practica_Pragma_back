@@ -12,7 +12,10 @@ public class PhotoHystrixFallBackFactory implements PhotoClient{
     @Override
     public ResponseEntity<Photo> getPhoto(String id) {
         // TODO Auto-generated method stub
-        return ResponseEntity.ok().build();
+        Photo photo = Photo.builder()
+        .id(null)
+        .photo(null).build();
+        return ResponseEntity.ok(photo);
     }
 
     @Override
@@ -23,6 +26,12 @@ public class PhotoHystrixFallBackFactory implements PhotoClient{
 
     @Override
     public ResponseEntity<Photo> updatePhoto(String id, Photo photo) {
+        // TODO Auto-generated method stub
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public ResponseEntity<Photo> deletePhoto(String id) {
         // TODO Auto-generated method stub
         return ResponseEntity.ok().build();
     }

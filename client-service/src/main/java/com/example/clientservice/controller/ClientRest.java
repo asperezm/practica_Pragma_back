@@ -24,6 +24,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
+
+import io.swagger.annotations.ApiOperation;
+
 import org.springframework.web.bind.annotation.RestController;
 import java.util.stream.Collectors;
 
@@ -31,13 +34,14 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/client")
+@RequestMapping("/clients")
 public class ClientRest {
 
     @Autowired
     ClientService clientService;
 
     @GetMapping
+    @ApiOperation(value = "Find all customer", notes = "Find all customer.")
     public ResponseEntity<List<Client>> listAllClient(){
         List<Client> clients = new ArrayList<>();
         clients = clientService.findClientAll();
@@ -48,7 +52,8 @@ public class ClientRest {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Client> getClient(@PathVariable("id") long id) {
+    @ApiOperation(value = "Find customer by id", notes = "Provide an ID to look up specific client")
+    public ResponseEntity<Client> getClient(@PathVariable("id") int id) {
         log.info("Fetching Client with id {}", id);
         Client client = clientService.getClient(id);
         if (  null == client) {
@@ -59,6 +64,7 @@ public class ClientRest {
     }
 
     @PostMapping
+    @ApiOperation(value = "Create a client", notes = "Provide client data to create it.")
     public ResponseEntity<Client> createClient(@Valid @RequestBody Client client, BindingResult result) throws IOException {
         log.info("Creating Client : {}", client);
         if (result.hasErrors()){
@@ -71,7 +77,8 @@ public class ClientRest {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<?> updateClient(@PathVariable("id") long id, @RequestBody Client client) throws IOException {
+    @ApiOperation(value = "Update a client", notes = "Provide client data to update it.")
+    public ResponseEntity<?> updateClient(@PathVariable("id") int id, @RequestBody Client client) throws IOException {
         log.info("Updating Client with id {}", id);
 
         Client currentClient = clientService.getClient(id);
@@ -86,17 +93,25 @@ public class ClientRest {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Client> deleteClient(@PathVariable("id") long id) {
+    @ApiOperation(value = "Delete a client", notes = "Provide a ID number to delete specific client.")
+    public ResponseEntity<Client> deleteClient(@PathVariable("id") int id) {
         log.info("Fetching & Deleting Client with id {}", id);
 
-        Client client = clientService.getClient(id);
-        if ( null == client ) {
+        Client clientDB = clientService.getClient(id);
+        if ( null == clientDB ) {
             log.error("Unable to delete. Client with id {} not found.", id);
             return  ResponseEntity.notFound().build();
         }
-        client = clientService.deleteClient(client);
-        return  ResponseEntity.ok(client);
+        clientService.deleteClient(clientDB.getId());
+        return  ResponseEntity.ok(clientDB);
     }
+
+    @GetMapping(value = "/age/{age}")
+    @ApiOperation(value = "Find client by age", notes = "Find all client by age.")
+    public ResponseEntity<List<Client>> listCustomersByAge(@PathVariable("age") int age) {
+		List<Client> clientDB = clientService.listCustomersByAge(age);
+		return ResponseEntity.ok(clientDB);
+	}
 
     private String formatMessage( BindingResult result){
         List<Map<String,String>> errors = result.getFieldErrors().stream()

@@ -12,14 +12,14 @@ import com.example.clientservice.repository.ClientRepository;
 import com.example.clientservice.util.MockMultipartFile;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
-import lombok.extern.slf4j.Slf4j;
 
 import org.apache.http.entity.ContentType;
 
-@Slf4j
 @Service
 public class ClientServiceImpl implements ClientService{
 
@@ -39,7 +39,7 @@ public class ClientServiceImpl implements ClientService{
     public Client createClient(Client client) throws IOException {
         // TODO Auto-generated method stub
 
-        Client clientDB = clientRepository.findByNumberID(client.getNumberID());
+        Client clientDB = clientRepository.findByNumberID(client.getId());
         if(clientDB != null){
             return clientDB;
         }
@@ -93,30 +93,38 @@ public class ClientServiceImpl implements ClientService{
     }
 
     @Override
-    public Client deleteClient(Client client) {
-        // TODO Auto-generated method stub
-
-       Client clientDB = getClient(client.getId());
-        if (clientDB ==null){
-            return  null;
-        }
-        client.setState("DELETED");
-        return clientRepository.save(client);
-    }
-
-    @Override
-    public Client getClient(Long id) {
+    public Client getClient(int id) {
         // TODO Auto-generated method stub
         Client clientDB =  clientRepository.findById(id).orElse(null);
         if (clientDB == null) {
 			return clientDB;
 		}
         if (clientDB.getPhotoId() != null) {
-            System.out.println("holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 			Photo photo = photoClient.getPhoto(clientDB.getPhotoId()).getBody();
 			clientDB.setPhoto(photo);
 		}
 		return clientDB;
+    }
+
+    @Override
+    public void deleteClient(int id) {
+        // TODO Auto-generated method stub
+        Client clientDB = clientRepository.findById(id).orElse(null);
+        if(clientDB == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "client doesn't exist");
+        }
+        clientRepository.delete(clientDB);
+        if(clientDB.getPhotoId() != null){
+            photoClient.deletePhoto(clientDB.getPhotoId());
+        }
+    }
+
+    @Override
+    public List<Client> listCustomersByAge(int age) {
+        // TODO Auto-generated method stub
+        List<Client> clientDB = null;
+        clientDB= clientRepository.findByAgeGreaterThanEqual(age);
+        return clientDB;
     }
     
 }

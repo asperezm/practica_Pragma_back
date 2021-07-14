@@ -11,6 +11,7 @@ public interface ClientService {
 
     public Client createClient(Client client) throws IOException;
     public Client updateClient(Client client) throws IOException;
-    public Client deleteClient(Client client);
-    public  Client getClient(Long id);
+    public void deleteClient(int id);
+    public  Client getClient(int id);
+    public List<Client> listCustomersByAge(int age);
 }
