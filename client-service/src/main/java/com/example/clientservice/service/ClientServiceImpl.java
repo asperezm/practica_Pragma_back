@@ -107,6 +107,20 @@ public class ClientServiceImpl implements ClientService{
     }
 
     @Override
+    public Client getClient(String numberID, String typeDoc) {
+        // TODO Auto-generated method stub
+        Client clientDB = clientRepository.findByNumberIDAndTypeDoc(numberID, typeDoc);
+        if (clientDB == null) {
+			return clientDB;
+		}
+        if (clientDB.getPhotoId() != null) {
+			Photo photo = photoClient.getPhoto(clientDB.getPhotoId()).getBody();
+			clientDB.setPhoto(photo);
+		}
+		return clientDB;
+    }
+
+    @Override
     public void deleteClient(int id) {
         // TODO Auto-generated method stub
         Client clientDB = clientRepository.findById(id).orElse(null);
@@ -126,5 +140,6 @@ public class ClientServiceImpl implements ClientService{
         clientDB= clientRepository.findByAgeGreaterThanEqual(age);
         return clientDB;
     }
+
     
 }

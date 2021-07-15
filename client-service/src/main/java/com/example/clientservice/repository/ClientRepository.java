@@ -10,4 +10,5 @@ public interface ClientRepository extends JpaRepository<Client,Integer>{
     public Client findByNumberID(int numberID);
     public List<Client> findByLastName(String lastName);
     public List<Client> findByAgeGreaterThanEqual(int age);
+    public Client findByNumberIDAndTypeDoc(String numberID,String typeDoc);
 }

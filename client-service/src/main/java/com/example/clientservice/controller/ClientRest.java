@@ -63,6 +63,18 @@ public class ClientRest {
         return  ResponseEntity.ok(client);
     }
 
+    @GetMapping(value = "/{typeDoc}/{numberID}")
+    @ApiOperation(value = "Find customer by type and number", notes = "Provide an type and number to look up specific client")
+    public ResponseEntity<Client> getClient(@PathVariable("typeDoc") String typeDoc, @PathVariable("numberID") String numberID) {
+        log.info("Fetching Client with type document and number {}", typeDoc, " ", numberID);
+        Client client = clientService.getClient(numberID,typeDoc);
+        if (  null == client) {
+            log.error("Client with type document and number {} {} not found", typeDoc, " ", numberID);
+            return  ResponseEntity.notFound().build();
+        }
+        return  ResponseEntity.ok(client);
+    }
+
     @PostMapping
     @ApiOperation(value = "Create a client", notes = "Provide client data to create it.")
     public ResponseEntity<Client> createClient(@Valid @RequestBody Client client, BindingResult result) throws IOException {

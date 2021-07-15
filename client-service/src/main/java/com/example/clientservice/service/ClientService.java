@@ -14,4 +14,5 @@ public interface ClientService {
     public void deleteClient(int id);
     public  Client getClient(int id);
     public List<Client> listCustomersByAge(int age);
+    public Client getClient(String numberID,String typeDoc);
 }
